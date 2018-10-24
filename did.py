@@ -39,8 +39,6 @@ def sig_claim(txn_hash, prize_result):
     digest.update(b64decode(data))
     signature = signer.sign(digest)
 
-    print("Hello type == " + str(type(signature)) + "content = " + b64encode(signature).decode('UTF-8'))
-
     prize_result["credentials"]["signature"]["signatureValue"] = b64encode(signature).decode('UTF-8')
 
     return prize_result
