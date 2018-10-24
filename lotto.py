@@ -5,8 +5,7 @@ import time
 
 from dlt import get_all_prizes 
 
-from config import ALL_PRIZE_PATH, ALL_PRIZE_URL, \
-        CLAIM_TEMPLATE_PATH
+from config import ALL_PRIZE_PATH, CLAIM_TEMPLATE_PATH
 
 def get_all_prize():
     content_all_prize = []
