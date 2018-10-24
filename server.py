@@ -1,6 +1,7 @@
 from flask import Flask, send_from_directory
 from lotto import check_duplicate_prize, win_prize
 from did import new_claim, add_txn_hash, sig_claim
+import json
 
 from config import TXN_TAG
 
@@ -37,7 +38,7 @@ def start():
     # Sig claim
     prize_result = sig_claim(txn_hash, prize_result)
 
-    return str(prize_result)
+    return json.dumps(prize_result)
 
 if __name__ == "__main__":
     app.run(debug=True, threaded=True, host="0.0.0.0")
