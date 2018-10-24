@@ -27,6 +27,8 @@ def sig_claim(txn_hash, prize_result):
     # Get private key
     file_pri_key = open(KEY_PAIR_PATH + "pri.key")
     private_key = file_pri_key.read()
+    if private_key == "":
+        return prize_result
     rsakey = RSA.importKey(private_key)
     file_pri_key.close()
 
