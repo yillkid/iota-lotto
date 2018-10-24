@@ -1,0 +1,6 @@
+FULL_NODE_URL="http://node.deviceproof.org:14265"
+SWARM_NODE_URL = "http://node0.puyuma.org:8001"
+ALL_PRIZE_PATH = "data/prize.json"
+CLAIM_TEMPLATE_PATH = "data/claims/"
+KEY_PAIR_PATH = "keys/"
+TXN_TAG = "MOPCONTESTV9"

@@ -1,0 +1,29 @@
+{
+  "status": "win",
+  "transation": "UTKPZ9DZJETUBKTEBZDTUUVYTOQNVNMSWPISIWIRYRONFEGTABKURIAJTTCZDAZMIKPBUAPGLGKG99999",
+  "credentials": {
+    "@context": [
+      "https://w3id.org/identity/v1",
+      "https://w3id.org/security/v1"
+    ],
+    "id": "http://example.gov/credentials/3732",
+    "type": ["Credential", "LotteryClaim"],
+    "issuer": "https://biilabs.io",
+    "issued": "2010-01-01",
+
+    "claim": {
+      "mid": "00001",
+      "lottery": {
+        "result": "win",
+        "prize": "first prize",
+        "time": "2016-06-18T21:10:38Z"
+      }
+    },
+    "signature": {
+      "type": "RsaSignature2018",
+      "created": "2016-06-18T21:10:38Z",
+      "creator": "https://biilabs.io/#key-1",
+      "signatureValue": "g4j9UrpHM4/uu32NlTw0HDaSaYF2sykskfuByD7UbuqEcJIKa+IoLJLrLjqDnMz0adwpBCHWaqqpnd47r0NKZbnJarGYrBFcRTwPQSeqGwac8E2SqjylTBbSGwKZkprEXTywyV7gILlC8a+naA7lBRi4y29FtcUJBTFQq4R5XzI="
+    }
+  }
+}
