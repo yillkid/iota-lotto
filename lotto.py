@@ -26,7 +26,7 @@ def check_duplicate_prize():
         return
 
     for index in range(len(list_all_prize)):
-        list_txn = get_all_prizes(list_all_prize[index]["id"])
+        list_txn = get_all_prizes_on_dlt(list_all_prize[index]["id"])
         if len(list_txn) is not 0:
             return False
 
@@ -39,8 +39,13 @@ def check_prize_quota(prize_result):
     else:
         return False
 
-def format_prize_to_did(user_id, prize):
-    file_claim_did = open(CLAIM_TEMPLATE_PATH + "prize.json", "r")
+def format_prize_to_did(user_id, prize = ""):
+    prize_template_path = CLAIM_TEMPLATE_PATH + "lose.json"
+
+    if prize != "":
+        prize_template_path = CLAIM_TEMPLATE_PATH + "prize.json"
+
+    file_claim_did = open(prize_template_path, "r")
     prize_result = json.loads(file_claim_did.read())
     file_claim_did.close()
 
@@ -48,9 +53,11 @@ def format_prize_to_did(user_id, prize):
 
     # Prize content
     prize_result["credentials"]["claim"]["mid"] = user_id
-    prize_result["credentials"]["claim"]["lottery"]["pid"] = prize["id"]
-    prize_result["credentials"]["claim"]["lottery"]["prize"] = prize["describe"]
     prize_result["credentials"]["claim"]["lottery"]["time"] = datetime_now
+
+    if prize != "":
+        prize_result["credentials"]["claim"]["lottery"]["pid"] = prize["id"]
+        prize_result["credentials"]["claim"]["lottery"]["prize"] = prize["describe"]
 
     return prize_result
 
@@ -60,13 +67,10 @@ def win_prize(user_id):
     if len(list_all_prize) is 0:
         return
 
-    # FIXME: Add lost probability
     prize_result = list_all_prize[random.randint(0,len(list_all_prize)-1)]
 
     # Check prize quota
-    # FIXME: format lost prize to DID
     if not check_prize_quota(prize_result):
-        print("lost prize")
-        return "lost prize"
+        return format_prize_to_did(user_id)
     else:
         return format_prize_to_did(user_id, prize_result)
