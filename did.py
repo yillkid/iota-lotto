@@ -6,8 +6,13 @@ from base64 import b64encode, b64decode
 
 from config import SWARM_NODE_URL, KEY_PAIR_PATH
 
-def new_claim(uuid, msg):
-    payload = {'extension':'tangleid', 'command':'new_claim', 'uuid':str(uuid), 'msg':str(msg)}
+def new_claim(msg):
+    # Sign claim
+    signature = sig_claim(msg["credentials"]["claim"]["mid"])
+    msg["credentials"]["signature"]["signatureValue"] =  b64encode(signature).decode('UTF-8')
+
+    # Issue claim
+    payload = {'extension':'tangleid', 'command':'new_claim', 'uuid':msg["credentials"]["claim"]["lottery"]["pid"], 'msg':str(msg)}
     r = requests.post(SWARM_NODE_URL, json=payload)
 
     return r.text
@@ -23,7 +28,7 @@ def add_txn_hash(txn_hash, prize_result):
 
     return prize_result
 
-def sig_claim(txn_hash, prize_result):
+def sig_claim(data):
     # Get private key
     file_pri_key = open(KEY_PAIR_PATH + "pri.key")
     private_key = file_pri_key.read()
@@ -33,14 +38,33 @@ def sig_claim(txn_hash, prize_result):
     file_pri_key.close()
 
     # Base64 deconde
-    data = b64encode(txn_hash.encode())
+    data = data.encode()
 
     # Sig the claim
     signer = PKCS1_v1_5.new(rsakey)
     digest = SHA256.new()
-    digest.update(b64decode(data))
+    digest.update(data)
     signature = signer.sign(digest)
 
-    prize_result["credentials"]["signature"]["signatureValue"] = b64encode(signature).decode('UTF-8')
+    return signature
 
-    return prize_result
+def verify(message, signature):
+    # Get public key
+    file_pub_key = open(KEY_PAIR_PATH + "pub.key")
+    public_key = file_pub_key.read()
+    if public_key == "":
+        print("Error: Cannot find public key file.")
+        return False
+    rsakey = RSA.importKey(public_key)
+    file_pub_key.close()
+
+    # Verify
+    signer = PKCS1_v1_5.new(rsakey)
+    digest = SHA256.new()
+    digest.update(message.encode())
+    if signer.verify(digest, b64decode(signature.encode())):
+        print("Success")
+        return True
+    else:
+        print("Error: Fail")
+        return False

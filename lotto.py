@@ -3,7 +3,7 @@ import random
 import requests
 import time
 
-from dlt import get_all_prizes 
+from dlt import get_all_prizes_on_dlt 
 
 from config import ALL_PRIZE_PATH, CLAIM_TEMPLATE_PATH
 
@@ -33,13 +33,13 @@ def check_duplicate_prize():
     return True
 
 def check_prize_quota(prize_result):
-    list_all_prize = get_all_prize()
-    if len(list_all_prize) <= int(prize_result["counts"]):
+    list_all_dlt_prize = get_all_prizes_on_dlt(prize_result["id"])
+    if len(list_all_dlt_prize) < int(prize_result["counts"]):
         return True
     else:
-        return True
+        return False
 
-def format_prize_to_did(prize):
+def format_prize_to_did(user_id, prize):
     file_claim_did = open(CLAIM_TEMPLATE_PATH + "prize.json", "r")
     prize_result = json.loads(file_claim_did.read())
     file_claim_did.close()
@@ -47,12 +47,15 @@ def format_prize_to_did(prize):
     datetime_now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.localtime())
 
     # Prize content
+    prize_result["credentials"]["claim"]["mid"] = user_id
+    prize_result["credentials"]["claim"]["lottery"]["pid"] = prize["id"]
     prize_result["credentials"]["claim"]["lottery"]["prize"] = prize["describe"]
     prize_result["credentials"]["claim"]["lottery"]["time"] = datetime_now
 
     return prize_result
 
-def win_prize():
+def win_prize(user_id):
+    # Get all prize in prize file
     list_all_prize = get_all_prize()
     if len(list_all_prize) is 0:
         return
@@ -63,7 +66,7 @@ def win_prize():
     # Check prize quota
     # FIXME: format lost prize to DID
     if not check_prize_quota(prize_result):
+        print("lost prize")
         return "lost prize"
-
     else:
-        return format_prize_to_did(prize_result)
+        return format_prize_to_did(user_id, prize_result)

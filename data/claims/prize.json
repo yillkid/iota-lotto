@@ -15,6 +15,7 @@
       "mid": "00001",
       "lottery": {
         "result": "win",
+	"pid": "ABE",
         "prize": "first prize",
         "time": "2016-06-18T21:10:38Z"
       }

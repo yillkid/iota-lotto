@@ -1,11 +1,11 @@
-from flask import Flask, Response, send_from_directory
+from flask import Flask, Response, send_from_directory, request
 from lotto import check_duplicate_prize, win_prize
-from did import new_claim, add_txn_hash, sig_claim
+from did import new_claim, add_txn_hash#, sig_claim
 import json
-
-from config import TXN_TAG
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def hello():
@@ -24,19 +24,19 @@ def prepare():
 
     return "All passed!"
 
-@app.route("/start")
+@app.route("/start", methods = ['POST'])
 def start():
+    # Get request data
+    content = request.json
+    
     # Starting prize
-    prize_result = win_prize()
+    prize_result = win_prize(content["mid"])
 
     # New claim
-    txn_hash = new_claim(TXN_TAG, prize_result)
+    txn_hash = new_claim(prize_result)
 
     # Add txn hash
     prize_result = add_txn_hash(txn_hash, prize_result)
-
-    # Sig claim
-    prize_result = sig_claim(txn_hash, prize_result)
 
     # Response with content type
     return Response(json.dumps(prize_result), mimetype='application/json')
