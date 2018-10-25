@@ -1,6 +1,6 @@
 from flask import Flask, Response, send_from_directory, request
 from lotto import check_duplicate_prize, win_prize
-from did import new_claim, add_txn_hash#, sig_claim
+from did import new_claim, add_txn_hash
 import json
 from flask_cors import CORS
 
