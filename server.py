@@ -2,10 +2,11 @@ from flask import Flask, Response, send_from_directory
 from lotto import check_duplicate_prize, win_prize
 from did import new_claim, add_txn_hash, sig_claim
 import json
-
+from flask_cors import CORS
 from config import TXN_TAG
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def hello():
