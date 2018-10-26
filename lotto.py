@@ -3,9 +3,10 @@ import random
 import requests
 import time
 
-from dlt import get_all_prizes_on_dlt 
+# from lotto import list_all_prize
+from dlt import get_all_prizes_on_dlt
 
-from config import ALL_PRIZE_PATH, CLAIM_TEMPLATE_PATH
+from config import ALL_PRIZE_PATH, CLAIM_TEMPLATE_PATH, PRIZE_STATUS
 
 def get_all_prize():
     content_all_prize = []
@@ -32,8 +33,12 @@ def check_duplicate_prize():
 
     return True
 
-def check_prize_quota(prize_result):
+def check_prize_quota(prize_result, ignore = ""):
     list_all_dlt_prize = get_all_prizes_on_dlt(prize_result["id"])
+
+    if ignore != "":
+        if ignore in list_all_dlt_prize: list_all_dlt_prize.remove(ignore)
+
     if len(list_all_dlt_prize) < int(prize_result["counts"]):
         return True
     else:
@@ -69,8 +74,4 @@ def win_prize(user_id):
 
     prize_result = list_all_prize[random.randint(0,len(list_all_prize)-1)]
 
-    # Check prize quota
-    if not check_prize_quota(prize_result):
-        return format_prize_to_did(user_id)
-    else:
-        return format_prize_to_did(user_id, prize_result)
+    return prize_result

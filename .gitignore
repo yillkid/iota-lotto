@@ -1,3 +1,5 @@
 __pycache__/
 keys/
 *.pyc
+*.swp
+data/prize.json

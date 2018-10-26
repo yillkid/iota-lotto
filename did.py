@@ -19,7 +19,7 @@ def new_claim(msg):
 
 def get_claim_info(hash_txn):
     payload = {'extension':'tangleid', 'command':'get_claim_info', 'hash_txn':str(hash_txn)}
-    r = requests.post(tangleid_url, json=payload)
+    r = requests.post(SWARM_NODE_URL, json=payload)
 
     return r.text
 
