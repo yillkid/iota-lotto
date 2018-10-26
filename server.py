@@ -27,7 +27,7 @@ def prepare():
 @app.route("/start", methods = ['POST'])
 def start():
     # Get request data
-    content = request.json
+    content = request.form
     
     # Starting prize
     prize_result = win_prize(content["mid"])
