@@ -33,8 +33,12 @@ def check_duplicate_prize():
 
     return True
 
-def check_prize_quota(prize_result):
+def check_prize_quota(prize_result, ignore = ""):
     list_all_dlt_prize = get_all_prizes_on_dlt(prize_result["id"])
+
+    if ignore != "":
+        if ignore in list_all_dlt_prize: list_all_dlt_prize.remove(ignore)
+
     if len(list_all_dlt_prize) < int(prize_result["counts"]):
         return True
     else:

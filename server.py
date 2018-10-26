@@ -54,7 +54,7 @@ def start():
     formed_prize_result = add_txn_hash(txn_hash, formed_prize_result)
 
     # Response with content type
-    if not check_prize_quota(prize_result):
+    if not check_prize_quota(prize_result, ignore = txn_hash):
         formed_prize_result = format_prize_to_did(content["mid"]) # Change to lose prize
 
     return Response(json.dumps(formed_prize_result), mimetype='application/json')
