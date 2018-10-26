@@ -27,11 +27,10 @@ def prepare():
 
     return "All passed!"
 
-
 @app.route("/get_claim_content", methods = ['POST'])
 def get_claim_content():
     # Get request data
-    content = request.json
+    content = request.form
     
     # Claim content
     return Response(get_claim_info(content["hash"]), mimetype='application/json')
@@ -44,7 +43,7 @@ def start():
         return Response(json.dumps(format_event(status, message)), mimetype='application/json')
 
     # Get request data
-    content = request.form
+    content = request.json
     
     # Starting prize
     prize_result = win_prize(content["mid"])
