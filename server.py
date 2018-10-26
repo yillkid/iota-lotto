@@ -1,7 +1,7 @@
 from flask import Flask, Response, send_from_directory, request
 from lotto import check_duplicate_prize, win_prize, \
         check_prize_quota, format_prize_to_did
-from did import new_claim, add_txn_hash
+from did import new_claim, add_txn_hash, get_claim_info
 from event import format_event
 from config import PRIZE_STATUS
 import json
@@ -26,6 +26,15 @@ def prepare():
                 modify id field in data/prize.json file."
 
     return "All passed!"
+
+
+@app.route("/get_claim_content", methods = ['POST'])
+def get_claim_content():
+    # Get request data
+    content = request.json
+    
+    # Claim content
+    return Response(get_claim_info(content["hash"]), mimetype='application/json')
 
 @app.route("/start", methods = ['POST'])
 def start():

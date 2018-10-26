@@ -75,9 +75,3 @@ def win_prize(user_id):
     prize_result = list_all_prize[random.randint(0,len(list_all_prize)-1)]
 
     return prize_result
-
-    # Check prize quota
-#    if not check_prize_quota(prize_result):
-#        return format_prize_to_did(user_id)
-#    else:
-#        return format_prize_to_did(user_id, prize_result)
