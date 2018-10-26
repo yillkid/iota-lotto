@@ -1,5 +1,6 @@
 from flask import Flask, Response, send_from_directory, request
-from lotto import check_duplicate_prize, win_prize
+from lotto import check_duplicate_prize, win_prize, \
+        check_prize_quota, format_prize_to_did
 from did import new_claim, add_txn_hash
 from event import format_event
 from config import PRIZE_STATUS
@@ -39,14 +40,24 @@ def start():
     # Starting prize
     prize_result = win_prize(content["mid"])
 
+    # Check prize quota
+    formed_prize_result = ""
+    if not check_prize_quota(prize_result):
+        formed_prize_result = format_prize_to_did(content["mid"])
+    else:
+        formed_prize_result = format_prize_to_did(content["mid"], prize_result)
+
     # New claim
-    txn_hash = new_claim(prize_result)
+    txn_hash = new_claim(formed_prize_result)
 
     # Add txn hash
-    prize_result = add_txn_hash(txn_hash, prize_result)
+    formed_prize_result = add_txn_hash(txn_hash, formed_prize_result)
 
     # Response with content type
-    return Response(json.dumps(prize_result), mimetype='application/json')
+    if not check_prize_quota(prize_result):
+        formed_prize_result = format_prize_to_did(content["mid"]) # Change to lose prize
+
+    return Response(json.dumps(formed_prize_result), mimetype='application/json')
 
 def check_status():
     status = ""
