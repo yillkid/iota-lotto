@@ -3,9 +3,10 @@ import random
 import requests
 import time
 
-from dlt import get_all_prizes_on_dlt 
+# from lotto import list_all_prize
+from dlt import get_all_prizes_on_dlt
 
-from config import ALL_PRIZE_PATH, CLAIM_TEMPLATE_PATH
+from config import ALL_PRIZE_PATH, CLAIM_TEMPLATE_PATH, PRIZE_STATUS
 
 def get_all_prize():
     content_all_prize = []
