@@ -24,7 +24,7 @@ def get_claim_info(hash_txn):
     return r.text
 
 def add_txn_hash(txn_hash, prize_result):
-    prize_result["transation"] = txn_hash
+    prize_result["transaction"] = txn_hash
 
     return prize_result
 
